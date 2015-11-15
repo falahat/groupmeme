@@ -6,6 +6,12 @@ As of now, you can just fetch a list of your groups and access the message / lik
 
 ## Setup
 
+### PythonPath
+You need to have this directory in your `PYTHONPATH`. Learn more about this [here](http://stackoverflow.com/questions/11960602/how-to-add-something-to-pythonpath).
+
+If this project is at `/home/you/code/groupmeme`, add `/home/you/code/` to your `PYTHONPATH`. You can do this by opening `~/.bash_profile` and adding this line:
+`export PYTHONPATH=$PYTHONPATH:/home/you/code/`.
+
 ### Dependencies
 I suggest using [conda](https://www.continuum.io/downloads) and [pip](http://pip.readthedocs.org/en/stable/installing/) to install these. Conda will also automatically download most of them for you.
 
