@@ -1,0 +1,7 @@
+{
+	"cache_path" : "cache/",
+	"archives_path" : "archives/",
+	"auth_key_path" : "auth.key",
+	
+	"caching_enabled" : true
+}
