@@ -1,7 +1,12 @@
 import requests
 import json
+import config
+import cacher
 
-BASE_PATH = "https://api.groupme.com/v3/"
+CONFIG = config.ConfigClient()
+
+API_BASE = CONFIG["api_base"]
+
 
 def get_auth_token():
 	with open("/home/aryan/code/groupmeme/auth.key") as fp:
@@ -15,14 +20,15 @@ class GroupmeClient(object):
 		else:
 			self.auth_token = get_auth_token()
 
+	@cacher.cache
 	def get_groups(self):
-		url = BASE_PATH + "groups"
+		url = API_BASE + "groups"
 		params = {"token":self.auth_token}
 		r = requests.get(url, params=params)
 		return r.json()
 
 	def get_group_message_chunk(self, group_id, max_messages=100, before_id=None, since_id=None):
-		url = BASE_PATH + "groups/{}/messages".format(group_id)
+		url = API_BASE + "groups/{}/messages".format(group_id)
 
 		params = {"token" : self.auth_token, "limit" : 100}
 		if before_id:
@@ -54,3 +60,9 @@ class GroupmeClient(object):
 			if max_messages and len(all_messages) > max_messages:
 				break;
 		return all_messages
+
+	def __str__(self):
+		return "GroupmeAPIClient"
+
+	def __repr__(self):
+		return "GroupmeClient()"
