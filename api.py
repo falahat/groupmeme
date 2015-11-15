@@ -25,7 +25,9 @@ class GroupmeClient(object):
 		url = API_BASE + "groups"
 		params = {"token":self.auth_token}
 		r = requests.get(url, params=params)
-		return r.json()
+		if r.status_code == 200:
+			ans = {g["name"] : g for g in r.json()["response"]}
+			return ans
 
 	def get_group_message_chunk(self, group_id, max_messages=100, before_id=None, since_id=None):
 		url = API_BASE + "groups/{}/messages".format(group_id)
@@ -53,6 +55,7 @@ class GroupmeClient(object):
 				before_id = curr_messages[-1]["id"]
 				yield curr_messages
 
+	@cacher.cache
 	def get_all_group_messages(self, group_id, before_id=None, max_messages=None):
 		all_messages = list()
 		for chunk in self.group_message_generator(group_id, before_id):

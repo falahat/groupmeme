@@ -11,13 +11,11 @@ class Group(object):
         self.raw_messages = None
 
     def collect_messages(self):
-        # self.raw_messages = api.CLIENT.get_all_group_messages(self.group_id)
-        self.raw_messages = json.load(open("/home/aryan/code/groupmeme/examples/hello.json"))
+        self.raw_messages = CLIENT.get_all_group_messages(self.group_id)
+        # self.raw_messages = json.load(open("/home/aryan/code/groupmeme/examples/hello.json"))
     
     def handle_messages(self):
         self.id_to_name = dict()
-        # self.messages = pd.DataFrame(columns=["message_id", "created_at", "sender_id"])
-        # self.likes = pd.DataFrame(columns=["liker_id", "receiver_id", "message_id"])
 
         message_ids = list()
         created_ats = list()
@@ -45,6 +43,9 @@ class Group(object):
         self.messages = pd.DataFrame({"message_id" : message_ids, "sender_id" : sender_ids, "created_at" : created_ats})
         self.likes = pd.DataFrame({"liker_id" : liker_ids, "receiver_id" : receiver_ids})
                 
+    def __repr__(self):
+        return "Group(group_id={})".format(self.group_id)
+
 
     def create_like_network(self):
         pass;

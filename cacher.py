@@ -28,7 +28,7 @@ def get_value(fn, args):
 	key = generate_key(fn, args)
 	filepath = os.path.join(cache_path, key)
 	with open(filepath) as fp:
-		return json.load(fp)
+		return json.load(fp)["VALUE"]
 
 
 def cache(fn):
