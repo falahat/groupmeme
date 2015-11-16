@@ -11,8 +11,9 @@ class Group(object):
         self.raw_messages = None
 
     def collect_messages(self):
+        """
+        """
         self.raw_messages = CLIENT.get_all_group_messages(self.group_id)
-        # self.raw_messages = json.load(open("/home/aryan/code/groupmeme/examples/hello.json"))
     
     def handle_messages(self):
         self.id_to_name = dict()

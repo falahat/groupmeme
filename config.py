@@ -12,7 +12,10 @@ class ConfigClient(object):
 	def __getitem__(self, key):
 		if key not in self.config_dict:
 			return None
+		
 		val = self.config_dict[key]
+		
+		# Automatically prepend the project directory path
 		if "path" in key:
 			val = os.path.join(self.BASE_PATH, val)
 		return val
