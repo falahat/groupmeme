@@ -4,16 +4,19 @@ import config
 import cacher
 
 CONFIG = config.ConfigClient()
-
 API_BASE = CONFIG["api_base"]
-
+AUTH_KEY_PATH = CONFIG["auth_key_path"]
 
 def get_auth_token():
-	with open("/home/aryan/code/groupmeme/auth.key") as fp:
+	"""
+	The user's authentication key is assumed to be in a specific file in 
+	the project directory.
+	"""
+	with open(AUTH_KEY_PATH) as fp:
 		return fp.read()
 
 class GroupmeClient(object):
-	"""docstring for GroupmeClient"""
+	""" A wrapper for the Groupme API """
 	def __init__(self, auth_token = None):
 		if auth_token:
 			self.auth_token = auth_token
@@ -22,6 +25,13 @@ class GroupmeClient(object):
 
 	@cacher.cache
 	def get_groups(self):
+		"""
+		Returns a dict of the user's groups, with the following output format:
+		{ ... group_name : group_info ... } where group_info is the full dict
+		of info about that group returned by the groupme API
+
+		MORE INFO: https://dev.groupme.com/docs/v3#groups_index
+		"""
 		url = API_BASE + "groups"
 		params = {"token":self.auth_token}
 		r = requests.get(url, params=params)
@@ -30,6 +40,11 @@ class GroupmeClient(object):
 			return ans
 
 	def get_group_message_chunk(self, group_id, max_messages=100, before_id=None, since_id=None):
+		"""
+		Returns a list of messages for a specific group.
+
+		MORE INFO: https://dev.groupme.com/docs/v3#messages_index
+		"""
 		url = API_BASE + "groups/{}/messages".format(group_id)
 
 		params = {"token" : self.auth_token, "limit" : 100}
@@ -47,6 +62,11 @@ class GroupmeClient(object):
 				return ans
 
 	def group_message_generator(self, group_id, before_id=None):
+		"""
+		Returns a generator over each message in a group, from newest to oldest message.
+
+		MORE INFO: https://dev.groupme.com/docs/v3#messages_index
+		"""
 		curr_messages = True
 
 		while curr_messages:
@@ -57,6 +77,13 @@ class GroupmeClient(object):
 
 	@cacher.cache
 	def get_all_group_messages(self, group_id, before_id=None, max_messages=None):
+		"""
+		Returns all of the messages for a group as a list. Each entry
+		of the list is a dict of information about that message 
+		returned by groupme API.
+
+		MORE INFO: https://dev.groupme.com/docs/v3#messages_index
+		"""
 		all_messages = list()
 		for chunk in self.group_message_generator(group_id, before_id):
 			all_messages += chunk

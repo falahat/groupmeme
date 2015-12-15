@@ -21,6 +21,7 @@ class Group(object):
         message_ids = list()
         created_ats = list()
         sender_ids = list()
+        texts = list()
 
         liker_ids = list()
         receiver_ids = list()
@@ -31,6 +32,7 @@ class Group(object):
             sender_id = message["sender_id"]
             sender_ids.append(sender_id)
             created_ats.append(message["created_at"])
+            texts.append(message["text"])
 
             sender_name = message["name"]
             if sender_id not in self.id_to_name:
@@ -41,8 +43,13 @@ class Group(object):
                 liker_ids.append(like)
                 receiver_ids.append(sender_id)
 
-        self.messages = pd.DataFrame({"message_id" : message_ids, "sender_id" : sender_ids, "created_at" : created_ats})
-        self.likes = pd.DataFrame({"liker_id" : liker_ids, "receiver_id" : receiver_ids})
+        self.messages = pd.DataFrame({"message_id" : message_ids,
+            "sender_id" : sender_ids,
+            "created_at" : created_ats,
+            "text" : texts})
+
+        self.likes = pd.DataFrame({"liker_id" : liker_ids,
+            "receiver_id" : receiver_ids})
                 
     def __repr__(self):
         return "Group(group_id={})".format(self.group_id)
