@@ -1,4 +1,4 @@
-import api
+from . import api
 import json
 import pandas as pd
 
@@ -19,19 +19,20 @@ class Group(object):
         self.id_to_name = dict()
 
         message_ids = list()
-        created_ats = list()
+        messages_created_at = list()
         sender_ids = list()
         texts = list()
 
         liker_ids = list()
         receiver_ids = list()
+        likes_created_at = list()
 
         for message in self.raw_messages:
 
             message_ids.append(message["id"])
             sender_id = message["sender_id"]
             sender_ids.append(sender_id)
-            created_ats.append(message["created_at"])
+            messages_created_at.append(message["created_at"])
             texts.append(message["text"])
 
             sender_name = message["name"]
@@ -42,13 +43,15 @@ class Group(object):
             for like in likes:
                 liker_ids.append(like)
                 receiver_ids.append(sender_id)
+                likes_created_at.append(message["created_at"])
 
         self.messages = pd.DataFrame({"message_id" : message_ids,
             "sender_id" : sender_ids,
-            "created_at" : created_ats,
+            "created_at" : messages_created_at,
             "text" : texts})
 
         self.likes = pd.DataFrame({"liker_id" : liker_ids,
+            "created_at" : likes_created_at,
             "receiver_id" : receiver_ids})
                 
     def __repr__(self):

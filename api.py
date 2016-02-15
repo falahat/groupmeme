@@ -1,7 +1,7 @@
 import requests
 import json
-import config
-import cacher
+from . import config
+from . import cacher
 
 CONFIG = config.ConfigClient()
 API_BASE = CONFIG["api_base"]

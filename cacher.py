@@ -30,7 +30,7 @@ def store_value(fn, args, value):
 	This writes the value as a JSON file in a specified cache directory.
 	"""
 	key = generate_key(fn, args)
-	filepath = os.path.join(cache_path, key)
+	filepath = os.path.join(cache_path, key) + ".json"
 	to_store = {"VALUE" : value}
 	with open(filepath, "w") as fp:
 		json.dump(to_store, fp)
